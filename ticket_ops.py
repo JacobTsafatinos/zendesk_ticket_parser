@@ -2,6 +2,7 @@ import requests
 import re
 import time
 
+
 def set_params(usr, password):
 	"""Initializes the user, password and subdomain strings to be used in all our API requests"""
 
@@ -40,6 +41,7 @@ def ticket_list(params, start_date='', end_date=time.strftime("%Y/%m/%d")):
 						i = 1
 				if i:
 					ticket_list.append(ticket['id'])
+					print ticket['id']
 		url = data['next_page']
 		if len(data['tickets']) < 1000:
 			break
@@ -65,11 +67,8 @@ def exact_ticket_list(params, start_date='', end_date=time.strftime("%Y/%m/%d"))
 			if (ticket['created_at'] and ticket['created_at'] >= start_date and ticket['created_at'] <= end_date):
 				i = 0
 				for param in params:
-					if ticket[param[0]]:
-						if re.search(param[1], str(ticket[param[0]])):
+					if ticket[param[0]] and re.search(param[1], str(ticket[param[0]])):
 							i += 1
-					else:
-						i += 1
 				if i == len(params):
 					ticket_list.append(ticket['id'])
 		url = data['next_page']

@@ -16,37 +16,36 @@ def url_builder(sub):
 	global subdomain
 	subdomain = 'https://' + sub + '/api/v2/'
 
-# def ticket_list(params, regex='\d|\D', start_date='', end_date=time.strftime("%Y/%m/%d")):
-# 	""" Return a list of ticket id's if any of the tickets parameters in the params list
-# 		  match the given regex and the tickets creation date is within the range of start_date and end_date.
-# 		  Default regex will go match everything, Default dates are from the first ticket created to the
-# 		  most recent ticket created.
-# 	"""
-
-# 	url = subdomain + 'incremental/tickets.json?start_time=0'
-# 	ticket_list = []
-# 	while url:
-# 		response = requests.get(url, auth=(user, pwd))
-# 		# Check for HTTP codes other than 200
-# 		if response.status_code != 200:
-# 			print('Status:', response.status_code, 'Problem with the request. Exiting.')
-# 			exit()
-# 		data = response.json()
-# 		for ticket in data['tickets']:
-# 			if (ticket['created_at'] and ticket['created_at'] >= start_date and ticket['created_at'] <= end_date):
-# 				i = 0
-# 				for param in params:
-# 					if (ticket[param] and re.search(regex, ticket[param])):
-# 						i = 1
-# 				if i:
-# 					ticket_list.append(ticket['id'])
-# 		url = data['next_page']
-# 		if len(data['tickets']) < 1000:
-# 			break
-# 	return ticket_list
-# ticket_list([['recipient', 'all@waveaccounting'], ['status', 'closed'], ['type', 'task'], ['group_id', '20246307']], '', '2014-05')
-
 def ticket_list(params, start_date='', end_date=time.strftime("%Y/%m/%d")):
+	""" Return a list of ticket id's if any of the tickets parameters in the params list
+		  match the given regex and the tickets creation date is within the range of start_date and end_date.
+		  Default regex will go match everything, Default dates are from the first ticket created to the
+		  most recent ticket created.
+	"""
+
+	url = subdomain + 'incremental/tickets.json?start_time=0'
+	ticket_list = []
+	while url:
+		response = requests.get(url, auth=(user, pwd))
+		# Check for HTTP codes other than 200
+		if response.status_code != 200:
+			print('Status:', response.status_code, 'Problem with the request. Exiting.')
+			exit()
+		data = response.json()
+		for ticket in data['tickets']:
+			if (ticket['created_at'] and ticket['created_at'] >= start_date and ticket['created_at'] <= end_date):
+				i = 0
+				for param in params:
+					if (ticket[param[0]] and re.search(param[1], ticket[param[0]])):
+						i = 1
+				if i:
+					ticket_list.append(ticket['id'])
+		url = data['next_page']
+		if len(data['tickets']) < 1000:
+			break
+	return ticket_list
+
+def exact_ticket_list(params, start_date='', end_date=time.strftime("%Y/%m/%d")):
 	""" Return a list of ticket id's if any of the tickets parameters in the params list
 		  match the given regex and the tickets creation date is within the range of start_date and end_date.
 		  Default regex will go match everything, Default dates are from the first ticket created to the

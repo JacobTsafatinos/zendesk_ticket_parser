@@ -15,10 +15,9 @@ This is a script written in Python for the Zendesk API to allow users to find ti
 <li>sub - the subdomain used in the request url. Example: 'https://(your_subdomain.zendesk.com)/api/v2/groups.json'</li>
 </ul>
 
-<tt>ticket_list(params, search, regex, start_date, end_date)</tt>:
+<tt>ticket_list(params, start_date, end_date)</tt>:
 <ul>
-<li>params - a list of key parameters to search through within the ticket object. Example: (['subject', 'description']) will search through the values asociated with the subject and description keys.</li>
-<li>regex - a regular expression to match against the values of the params keys given.</li>
+<li>params - a list of 2 element lists. The first element is a key parameter to search through within the ticket object. The second element is a regex to match the key against. Example: ([['subject', 'hello'], ['description', 'monkeys are attacking']])</li>
 <li>start_date - the first date you want to consider when looking at tickets.</li>
 <li>end_date - the last date you want to consider when looking at tickets.</li>
 </ul>
@@ -41,7 +40,7 @@ This is a script written in Python for the Zendesk API to allow users to find ti
 <li>ticket_id_list - a list of ticket id's for the tickets you wish to delete.</li>
 </ul>
 
-<tt>delete_attachments(ticket_id_list)</tt>:
+<!-- <tt>delete_attachments(ticket_id_list)</tt>:
 <ul>
 <li>attachment_id_list - a list of attachment id's for the attachments you wish to delete.</li>
-</ul>
+</ul> -->

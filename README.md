@@ -15,11 +15,18 @@ This is a script written in Python for the Zendesk API to allow users to find ti
 <li>sub - the subdomain used in the request url. Example: 'https://(your_subdomain.zendesk.com)/api/v2/groups.json'</li>
 </ul>
 
-<tt>ticket_list(params, start_date, end_date)</tt>:
+<tt>ticket_list(optional_params, required_params, start_date, end_date)</tt>:
 <ul>
-<li>params - a list of 2 element lists. The first element is a key parameter to search through within the ticket object. The second element is a regex to match the key against. Example: ([['subject', 'hello'], ['description', 'monkeys are attacking']])</li>
+<li>optional_params - a optional list (only one key needs to match the regex to return the ticket id) of 2 element lists. The first element is a key parameter to search through within the ticket object. The second element is a regex to match the key against. Example: ([['subject', 'hello'], ['description', 'monkeys are attacking']])</li>
+<li>required_params - same as optional params execpt all keys must match the given regex to return the ticket id</li>
 <li>start_date - the first date you want to consider when looking at tickets.</li>
 <li>end_date - the last date you want to consider when looking at tickets.</li>
+</ul>
+
+<tt>has_attachment(ticket_id_list, regex)</tt>:
+<ul>
+<li>ticket_id_list - a list of ticket id's that you would like to parse through to find if they have any attachments</li>
+<li>regex - a regular expression to find attachments meeting specific file names. For example if you only wanted pdf attachments you could use 'pdf' as your regex argument.</li>
 </ul>
 
 <tt>attachment_list(ticket_id_list, regex)</tt>:

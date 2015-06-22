@@ -1,6 +1,6 @@
 # Zendesk Ticket Parser
 
-This is a script written in Python for the Zendesk API to allow users to find tickets with specific information in them. Included is a method of finding specific attachments associated with those tickets, as well as methods for deleting the tickets and attachments. This parser will go through every ticket created.
+This is a script written in Python for the Zendesk API to allow users to find tickets with specific information in them. Included is a method of finding specific attachments associated with those tickets, as well as methods for deleting the tickets. This parser will go through every ticket created.
 
 # Usage
 
@@ -45,6 +45,13 @@ This is a script written in Python for the Zendesk API to allow users to find ti
 <tt>delete_tickets(ticket_id_list)</tt>:
 <ul>
 <li>ticket_id_list - a list of ticket id's for the tickets you wish to delete.</li>
+</ul>
+
+#TO DO:
+
+<ul>
+<li>Find a way to only search through tickets between specific time intervals, currently we're always going through all tickets no matter what.</li>
+<li>Write meaningful tests</li>
 </ul>
 
 <!-- <tt>delete_attachments(ticket_id_list)</tt>:

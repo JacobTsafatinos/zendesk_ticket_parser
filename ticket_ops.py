@@ -62,9 +62,9 @@ def has_attachment(ticket_id_list, regex='\d\D'):
 		audit_url = subdomain + 'tickets/' + str(ticket) + '/audits.json'
 		audit_response = requests.get(audit_url, auth=(user,pwd))
 		try:
-        response.raise_for_status()
-    except Exception:
-        print('Status:', audit_response.status_code, 'Problem with the request for ticket with id {}. Moving on.'.format(ticket_id))
+			audit_response.raise_for_status()
+		except Exception:
+			print('Status:', audit_response.status_code, 'Problem with the request for ticket with id {}. Moving on.'.format(ticket_id))
 
 		audit_data = audit_response.json()
 		for audit in audit_data['audits']:
@@ -76,6 +76,19 @@ def has_attachment(ticket_id_list, regex='\d\D'):
 			attachment_list.append(ticket)
 	return attachment_list
 
+# def _has_attachment(audits, regex):
+#       for _ in _get_attachments(audits, regex):
+#           return True
+#       return False
+
+# def _get_attachments(audits, regex):
+#     attachment_list = []
+#     for audit in audits:
+#         if 'attachments' in audit['events'][0] and audit['events'][0]['attachments']:
+#             for attachment in audit['events'][0]['attachments']:
+#                 if re.search(regex, attachment['file_name']):
+#                     yield attachment['id']
+
 def attachment_list(ticket_id_list, regex='\d|\D'):
 	"""	Find a list of attachment id's belonging to a list of tickets(ticket_id_list)
 			who's file matches a given regex. Default regex will match everything. """
@@ -85,9 +98,9 @@ def attachment_list(ticket_id_list, regex='\d|\D'):
 		audit_url = subdomain + 'tickets/' + str(ticket) + '/audits.json'
 		audit_response = requests.get(audit_url, auth=(user,pwd))
 		try:
-        response.raise_for_status()
-    except Exception:
-        print('Status:', audit_response.status_code, 'Problem with the request for ticket with id {}. Moving on.'.format(ticket_id))
+			audit_response.raise_for_status()
+		except Exception:
+			print('Status:', audit_response.status_code, 'Problem with the request for ticket with id {}. Moving on.'.format(ticket_id))
 
 
 		audit_data = audit_response.json()
@@ -112,9 +125,9 @@ def delete_tickets(ticket_id_list):
 		ticket_url = subdomain + 'tickets/destroy_many.json?ids=' + str(sublist).strip('[]')
 		remove_ticket_response = requests.delete(ticket_url, auth=(user,pwd))
 		try:
-        response.raise_for_status()
-    except Exception:
-        print('Status:', audit_response.status_code, 'Problem with the request for ticket with id {}. Moving on.'.format(ticket_id))
+			remove_ticket_response.raise_for_status()
+		except Exception:
+			print('Status:', audit_response.status_code, 'Problem with the request for ticket with id {}. Moving on.'.format(ticket_id))
 
 
 

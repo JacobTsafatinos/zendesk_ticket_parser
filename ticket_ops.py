@@ -15,7 +15,7 @@ def url_builder(sub):
 	"""Create the beggining string to every request url"""
 
 	global subdomain
-	subdomain = 'https://' + sub + '/api/v2/'
+	subdomain ='https://{}/api/v2/'.format(sub)
 
 def ticket_list(optional_params=[], required_params=[], start_date='', end_date=time.strftime("%Y/%m/%d")):
 	""" Return a list of ticket id's who's keys match the optional_params and required_params lists,

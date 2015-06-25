@@ -76,19 +76,6 @@ def has_attachment(ticket_id_list, regex='\d\D'):
 			attachment_list.append(ticket)
 	return attachment_list
 
-# def _has_attachment(audits, regex):
-#       for _ in _get_attachments(audits, regex):
-#           return True
-#       return False
-
-# def _get_attachments(audits, regex):
-#     attachment_list = []
-#     for audit in audits:
-#         if 'attachments' in audit['events'][0] and audit['events'][0]['attachments']:
-#             for attachment in audit['events'][0]['attachments']:
-#                 if re.search(regex, attachment['file_name']):
-#                     yield attachment['id']
-
 def attachment_list(ticket_id_list, regex='\d|\D'):
 	"""	Find a list of attachment id's belonging to a list of tickets(ticket_id_list)
 			who's file matches a given regex. Default regex will match everything. """

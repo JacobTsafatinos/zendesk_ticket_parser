@@ -20,54 +20,35 @@ class ZendesSearcher(object):
         return '{}{}'.format(self.url, path)
 
 
-		# def set_params(usr, password):
-		# 	"""Initializes the user, password and subdomain strings to be used in all our API requests"""
+    def get_matching_tickets(self, optional_params=[], required_params=[], start_date=None, end_date=None):
+        """
+        Return a list of ticket id's if any of the tickets parameters in the params list
+        match the given regex and the tickets creation date is within the range of start_date and end_date.
+        Default regex will go match everything, Default dates are from the first ticket created to the
+        most recent ticket created.
+        """
+        url = self.get_page_url('incremental/tickets.json?start_time=0')
 
-		# 	global user
-		# 	global pwd
-		# 	user = usr
-		# 	pwd = password
+        while url:
+            response = requests.get(url, auth=self.auth, headers=self.headers)
+            response.raise_for_status()
 
-		def url_builder(sub):
-			"""Create the beggining string to every request url"""
+            data = response.json()
 
-			global subdomain
-			subdomain ='https://{}/api/v2/'.format(sub)
+            for ticket in data['tickets']:
+                created_at = ticket.get('created_at', None)
+                created_at = created_at and datetime.strptime(created_at.split('T')[0], '%Y-%m-%d')
+                if not (created_at or start_date or end_date) or ((start_date and created_at < start_date) or (end_date and created_at > end_date)):
+                    continue
 
-		def ticket_list(optional_params=[], required_params=[], start_date='', end_date=time.strftime("%Y/%m/%d")):
-			""" Return a list of ticket id's who's keys match the optional_params and required_params lists,
-				  and the tickets creation date is within the range of start_date and end_date.
-				  both optional and required params are lists of 2 element lists, the first element being the key
-				  and the second element being the regex you wish to match against the key,
-				  Default dates are from the first ticket created to the most recent ticket created.
-			"""
+                req_matches_found = [ticket[field] and re.search(pattern, ticket[field]) for field, pattern in required_params.viewitems()]
+                ops_matches_found = [ticket[field] and re.search(pattern, ticket[field]) for field, pattern in optional_params.viewitems()]
+                if any(ops_matches_found) and all(matches_found):
+                    yield ticket['id']
 
-			url = subdomain + 'incremental/tickets.json?start_time=0'
-			ticket_list = []
-			while url:
-				response = requests.get(url, auth=(user, pwd))
-				response.raise_for_status()
-
-				data = response.json()
-				for ticket in data['tickets']:
-					if (ticket['created_at'] and ticket['created_at'] >= start_date and ticket['created_at'] <= end_date):
-						i = 0
-						# Only one key has to match it's regex for this to work
-						for param in optional_params:
-							if ticket[param[0]] and re.search(param[1], ticket[param[0]]):
-								i = 1
-						j = 0
-						# Every key has to match it's regex for this to work
-						for param in required_params:
-							if ticket[param[0]] and re.search(param[1], str(ticket[param[0]])):
-									j += 1
-						if j == len(required_params) and i:
-							ticket_list.append(ticket['id'])
-							print ticket['id']
-				url = data['next_page']
-				if len(data['tickets']) < 1000:
-					break
-			return ticket_list
+            url = data['next_page']
+            if len(data['tickets']) < 1000:
+                break
 
 		def has_attachment(ticket_id_list, regex='\d\D'):
 			"""	Find a list of ticket id's that have attachments
